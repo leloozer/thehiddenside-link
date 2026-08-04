@@ -28,20 +28,30 @@ demande un plan payant, et le code de l'app n'a pas à devenir public pour ça.
 
 ## Brancher dans l'app
 
-`AppConfig.shareLink` est un `String.fromEnvironment`, donc **aucun code à
-modifier** — seule la commande de build change :
+Rien à faire : `AppConfig` (dépôt de l'app) compose les deux liens à partir de
+cette URL, qui est sa valeur par défaut. Aucun `--dart-define` n'est *nécessaire*
+pour que le partage fonctionne.
+
+| Bouton de l'app | Lien produit | Campagne |
+|---|---|---|
+| Partager une énigme | `…/?s=story` | `story` |
+| Invite un ami | `…/?s=invit` | `invit` |
+
+Surcharges disponibles au build si besoin (test, changement d'hébergement) :
+`SMART_LINK_BASE` pour changer la base, `SHARE_LINK` / `INVITE_LINK` pour
+imposer une URL complète par canal.
 
 ```bash
 flutter build appbundle \
-  --dart-define=SHARE_LINK=https://leloozer.github.io/thehiddenside-link/?s=story \
   --dart-define=STORE_URL_ANDROID=https://play.google.com/store/apps/details?id=app.hiddenside \
   --dart-define=POSTHOG_API_KEY=phc_...
 ```
 
-`?s=` identifie le canal et se retrouve dans les rapports d'acquisition des
-stores : `?s=story` pour le partage d'une énigme, `?s=invite` pour « invite un
-ami », `?s=reddit` pour une campagne. Le `404.html` étant une copie de la page,
-n'importe quel chemin fonctionne aussi (`/go`, `/s/story_12`…).
+Autres canaux, hors app : ajouter le `?s=` voulu à la main (`?s=reddit`,
+`?s=insta`…). Le `404.html` étant une copie de la page, n'importe quel chemin
+fonctionne aussi (`/go`, `/s/story_12`…) — mais pour un lien partagé, préférer
+l'URL racine : les robots d'aperçu peuvent ignorer les balises `og:` servies
+avec un statut 404.
 
 ## Attribution des installs
 
