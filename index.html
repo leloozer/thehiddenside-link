@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Hidden Side</title>
+<meta name="description" content="Des mystères en une ligne qui retournent le cerveau. Sauras-tu révéler la face cachée ?">
+
+<!-- L'aperçu affiché dans WhatsApp, iMessage, Discord… vient de CES balises,
+     pas de la fiche du store : c'est un gain par rapport au partage d'un lien
+     store brut. Les robots des messageries n'exécutent pas de JavaScript, ils
+     ne lisent que cet en-tête — la redirection ci-dessous ne les gêne pas. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Hidden Side">
+<meta property="og:description" content="Des mystères en une ligne qui retournent le cerveau. Sauras-tu révéler la face cachée ?">
+<meta property="og:image" content="https://leloozer.github.io/thehiddenside-link/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #000; color: #fff; }
+  body {
+    display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    text-align: center; padding: 24px;
+  }
+  main { max-width: 420px; }
+  img.cover { width: 100%; height: auto; border-radius: 8px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 24px 0 8px; }
+  p  { font-size: 15px; line-height: 1.5; color: rgba(255,255,255,.72); margin: 0 0 28px; }
+  a.store {
+    display: block; padding: 14px 20px; margin: 10px 0;
+    background: #fff; color: #000; text-decoration: none;
+    border-radius: 6px; font-size: 16px; font-weight: 600;
+  }
+  a.store.secondary { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); }
+</style>
+</head>
+<body>
+<main>
+  <img class="cover" src="preview.jpg" alt="The Hidden Side" width="1200" height="630">
+  <h1>The Hidden Side</h1>
+  <p>Des mystères en une ligne qui retournent le cerveau.<br>Sauras-tu révéler la face cachée ?</p>
+  <!-- Ces deux liens sont la version sans JavaScript : ils restent valides même
+       si le script ne s'exécute pas, et servent d'affichage sur ordinateur. -->
+  <a class="store" id="ios" href="https://apps.apple.com/app/id6754876390">Télécharger sur l'App Store</a>
+  <a class="store secondary" id="play" href="https://play.google.com/store/apps/details?id=app.hiddenside">Télécharger sur Google Play</a>
+</main>
+
+<script>
+(function () {
+  var APP_STORE_ID = '6754876390';
+  var PLAY_PACKAGE = 'app.hiddenside';
+
+  // Provider token Apple, à récupérer dans App Store Connect → App Analytics
+  // (générateur de liens de campagne). Tant qu'il est vide, le lien iOS
+  // fonctionne normalement : seule l'attribution par campagne manque côté
+  // Apple. Côté Google, l'attribution marche sans rien renseigner.
+  var APPLE_PT = '';
+
+  // `?s=` identifie le canal de partage (?s=story, ?s=invite, ?s=reddit…) et se
+  // retrouve dans les rapports d'acquisition des deux stores. Filtré, car cette
+  // valeur vient de l'URL et part dans un lien.
+  var source = (new URLSearchParams(location.search).get('s') || 'share')
+    .replace(/[^a-z0-9_-]/gi, '').slice(0, 40) || 'share';
+
+  var ios = 'https://apps.apple.com/app/id' + APP_STORE_ID;
+  if (APPLE_PT) {
+    ios += '?pt=' + encodeURIComponent(APPLE_PT) + '&ct=' + encodeURIComponent(source) + '&mt=8';
+  }
+
+  // Le paramètre `referrer` de Google Play doit contenir une chaîne utm
+  // elle-même encodée.
+  var play = 'https://play.google.com/store/apps/details?id=' + PLAY_PACKAGE
+    + '&referrer=' + encodeURIComponent(
+        'utm_source=' + source + '&utm_medium=app&utm_campaign=share');
+
+  document.getElementById('ios').href = ios;
+  document.getElementById('play').href = play;
+
+  var ua = navigator.userAgent || '';
+  // `replace` et non `href` : le bouton retour du destinataire ne reste pas
+  // piégé sur cette page.
+  if (/iPhone|iPad|iPod/i.test(ua)) location.replace(ios);
+  else if (/Android/i.test(ua)) location.replace(play);
+  // Ordinateur : on ne devine pas l'appareil, les deux boutons restent
+  // affichés (cas courant d'un lien ouvert depuis WhatsApp Web).
+})();
+</script>
+</body>
+</html>
