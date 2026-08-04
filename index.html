@@ -45,49 +45,10 @@
   <p>Des mystères en une ligne qui retournent le cerveau.<br>Sauras-tu révéler la face cachée ?</p>
   <!-- Ces deux liens sont la version sans JavaScript : ils restent valides même
        si le script ne s'exécute pas, et servent d'affichage sur ordinateur. -->
-  <a class="store" id="ios" href="https://apps.apple.com/app/id6754876390">Télécharger sur l'App Store</a>
+  <a class="store" id="ios" href="https://apps.apple.com/app/apple-store/id6754876390">Télécharger sur l'App Store</a>
   <a class="store secondary" id="play" href="https://play.google.com/store/apps/details?id=app.hiddenside">Télécharger sur Google Play</a>
 </main>
 
-<script>
-(function () {
-  var APP_STORE_ID = '6754876390';
-  var PLAY_PACKAGE = 'app.hiddenside';
-
-  // Provider token Apple, à récupérer dans App Store Connect → App Analytics
-  // (générateur de liens de campagne). Tant qu'il est vide, le lien iOS
-  // fonctionne normalement : seule l'attribution par campagne manque côté
-  // Apple. Côté Google, l'attribution marche sans rien renseigner.
-  var APPLE_PT = '';
-
-  // `?s=` identifie le canal de partage (?s=story, ?s=invite, ?s=reddit…) et se
-  // retrouve dans les rapports d'acquisition des deux stores. Filtré, car cette
-  // valeur vient de l'URL et part dans un lien.
-  var source = (new URLSearchParams(location.search).get('s') || 'share')
-    .replace(/[^a-z0-9_-]/gi, '').slice(0, 40) || 'share';
-
-  var ios = 'https://apps.apple.com/app/id' + APP_STORE_ID;
-  if (APPLE_PT) {
-    ios += '?pt=' + encodeURIComponent(APPLE_PT) + '&ct=' + encodeURIComponent(source) + '&mt=8';
-  }
-
-  // Le paramètre `referrer` de Google Play doit contenir une chaîne utm
-  // elle-même encodée.
-  var play = 'https://play.google.com/store/apps/details?id=' + PLAY_PACKAGE
-    + '&referrer=' + encodeURIComponent(
-        'utm_source=' + source + '&utm_medium=app&utm_campaign=share');
-
-  document.getElementById('ios').href = ios;
-  document.getElementById('play').href = play;
-
-  var ua = navigator.userAgent || '';
-  // `replace` et non `href` : le bouton retour du destinataire ne reste pas
-  // piégé sur cette page.
-  if (/iPhone|iPad|iPod/i.test(ua)) location.replace(ios);
-  else if (/Android/i.test(ua)) location.replace(play);
-  // Ordinateur : on ne devine pas l'appareil, les deux boutons restent
-  // affichés (cas courant d'un lien ouvert depuis WhatsApp Web).
-})();
-</script>
+<script src="smartlink.js"></script>
 </body>
 </html>

@@ -43,15 +43,21 @@ stores : `?s=story` pour le partage d'une énigme, `?s=invite` pour « invite un
 ami », `?s=reddit` pour une campagne. Le `404.html` étant une copie de la page,
 n'importe quel chemin fonctionne aussi (`/go`, `/s/story_12`…).
 
-## Activer l'attribution iOS
+## Attribution des installs
 
-Côté Google Play, l'attribution fonctionne déjà (paramètre `referrer`).
+Active sur les deux plateformes.
 
-Côté Apple, il manque le *provider token* : le récupérer dans App Store Connect
-→ App Analytics (générateur de liens de campagne), puis le renseigner dans
-`APPLE_PT` en haut du `<script>` de `index.html` **et** de `404.html`. Tant
-qu'il est vide, le lien fonctionne normalement — seule l'attribution par
-campagne manque.
+| Plateforme | Mécanisme | Où le lire |
+|---|---|---|
+| iOS | `?pt=128269806&ct=<canal>&mt=8` | App Store Connect → App Analytics → campagnes |
+| Android | `&referrer=utm_source=<canal>&…` | Play Console → acquisition |
+
+Le canal vient du `?s=` de l'URL partagée. Apple limite `ct` à 40 caractères :
+la valeur est filtrée et tronquée par le script.
+
+Le `pt` (*provider token*) provient du générateur de liens de campagne d'App
+Store Connect. Toute la logique vit dans **`smartlink.js`**, chargé par
+`index.html` et `404.html` : c'est le seul fichier à modifier.
 
 ## Où lire les résultats
 
