@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <base href="https://leloozer.github.io/thehiddenside-link/">
 <title>The Hidden Side</title>
-<meta name="description" content="Des mystères en une ligne qui retournent le cerveau. Sauras-tu révéler la face cachée ?">
+<meta name="description" content="Des mystères en une ligne qui retournent le cerveau. À résoudre seul, ou à deux — chacun sur son téléphone.">
 
 <!-- L'aperçu affiché dans WhatsApp, iMessage, Discord… vient de CES balises,
      pas de la fiche du store : c'est un gain par rapport au partage d'un lien
@@ -13,7 +13,7 @@
      ne lisent que cet en-tête — la redirection ci-dessous ne les gêne pas. -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Hidden Side">
-<meta property="og:description" content="Des mystères en une ligne qui retournent le cerveau. Sauras-tu révéler la face cachée ?">
+<meta property="og:description" content="Des mystères en une ligne qui retournent le cerveau. À résoudre seul, ou à deux — chacun sur son téléphone.">
 <meta property="og:image" content="https://leloozer.github.io/thehiddenside-link/preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -43,13 +43,16 @@
 <main>
   <img class="cover" src="preview.jpg" alt="The Hidden Side" width="1200" height="630">
   <h1>The Hidden Side</h1>
-  <p>Des mystères en une ligne qui retournent le cerveau.<br>Sauras-tu révéler la face cachée ?</p>
+  <p>Des mystères en une ligne qui retournent le cerveau.<br>À résoudre seul, ou à deux — chacun sur son téléphone.</p>
   <!-- Ces deux liens sont la version sans JavaScript : ils restent valides même
        si le script ne s'exécute pas, et servent d'affichage sur ordinateur. -->
   <a class="store" id="ios" href="https://apps.apple.com/app/apple-store/id6754876390">Télécharger sur l'App Store</a>
   <a class="store secondary" id="play" href="https://play.google.com/store/apps/details?id=app.hiddenside">Télécharger sur Google Play</a>
 </main>
 
+<!-- Chargé AVANT `smartlink.js` : il définit `countClick`, le comptage
+     anonyme que `smartlink.js` envoie juste avant de rediriger. -->
+<script src="posthog.js"></script>
 <script src="smartlink.js"></script>
 </body>
 </html>

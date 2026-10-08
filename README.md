@@ -47,8 +47,18 @@ flutter build appbundle \
   --dart-define=POSTHOG_API_KEY=phc_...
 ```
 
-Autres canaux, hors app : ajouter le `?s=` voulu à la main (`?s=reddit`,
-`?s=insta`…). Le `404.html` étant une copie de la page, n'importe quel chemin
+Autres canaux, hors app : ajouter le `?s=` voulu à la main, selon la
+convention commune aux apps du portefeuille — `<réseau>-<emplacement>`, en
+minuscules, le tableau de bord regroupe par réseau sur le préfixe :
+
+| Où est le lien | `?s=` |
+|---|---|
+| Bio Instagram · story · légende de post ou Reel · message privé | `ig-bio` · `ig-story` · `ig-post` · `ig-dm` |
+| Bio TikTok · légende de vidéo · message privé | `tt-bio` · `tt-video` · `tt-dm` |
+| YouTube Shorts · Facebook · Reddit | `yt-short` · `fb-post` · `reddit-<sub>` |
+| Une campagne payante | `<réseau>-ads-<nom>` (`ig-ads-lancement`) |
+
+Le `404.html` étant une copie de la page, n'importe quel chemin
 fonctionne aussi (`/go`, `/s/story_12`…) — mais pour un lien partagé, préférer
 l'URL racine : les robots d'aperçu peuvent ignorer les balises `og:` servies
 avec un statut 404.
@@ -74,14 +84,16 @@ Store Connect. Toute la logique vit dans **`smartlink.js`**, chargé par
 | Étape | Où |
 |---|---|
 | Partages émis depuis l'app | PostHog : `story_shared`, `referral_invite_sent` |
-| Clics sur le lien | GitHub Pages n'expose pas de statistiques — voir ci-dessous |
+| Clics sur le lien | PostHog : `smartlink_opened` (par `s`, `platform`, `sent_to`), et `smartlink_store_tapped` sur ordinateur |
 | Installs par canal | App Store Connect → App Analytics ; Play Console → acquisition |
+| Tout ensemble | Tableau de bord du portefeuille → Acquisition → « Réseaux sociaux et liens » |
 
-GitHub Pages ne fournit aucune statistique de trafic. Pour connaître le nombre
-de clics (et donc le ratio partages → clics → installs), deux options : passer
-l'hébergement sur Cloudflare Pages (gratuit, statistiques incluses), ou ajouter
-le snippet web PostHog à la page — au prix d'une bannière de consentement, la
-page étant publique et hors app.
+Les clics sont comptés par **`posthog.js`** : un envoi direct à PostHog, sans
+SDK, sans cookie ni identifiant conservé, sans profil de personne — un
+compteur, pas un suivi. Le SDK ne convenait pas : chargé en asynchrone, il n'a
+jamais le temps de s'exécuter avant la redirection vers le store. Pour que
+PostHog ne garde pas l'adresse IP, activer « Discard client IP data » dans les
+réglages du projet.
 
 ## Mettre à jour l'image d'aperçu
 
